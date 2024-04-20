@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/margin_small_xx">
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtDirectPdfDownload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="@string/str_summary_report"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_normal_xxxx"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/btnDownload"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnDownload" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnDownload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:letterSpacing="0.3"
+        android:text="@string/str_download"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_normal_xx"
+        android:textStyle="bold"
+        app:backgroundTint="@color/color_fill_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtDirectPdfDownload" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtDatePdfDownload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_size_normal"
+        android:gravity="center_vertical"
+        android:text="@string/str_date_summary_report"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_normal_xxxx"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnDownload" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnDateDownload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:letterSpacing="0.3"
+        android:text="@string/str_select_date"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_normal_xx"
+        android:textStyle="bold"
+        app:backgroundTint="@color/color_fill_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtDatePdfDownload" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textStyle="bold"
+                android:id="@+id/dialogTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/are_you_sure_you_want_to_logout"
+                android:textSize="@dimen/text_size_medium_xx" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="@dimen/margin_extra_large"
+            android:alpha=".5"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_height_medium"
+            android:layout_margin="@dimen/margin_normal"
+            android:layout_gravity="end">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textStyle="bold"
+                android:id="@+id/dialogCancel"
+                android:layout_width="100dp"
+                android:layout_height="@dimen/button_height_medium"
+                android:gravity="center"
+                android:text="@string/text_no"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_medium" />
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:alpha=".5" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/dialogYes"
+                android:textStyle="bold"
+                android:layout_width="94dp"
+                android:layout_height="@dimen/button_height_medium"
+                android:gravity="center"
+                android:text="@string/text_yes"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_medium" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/mainToolbar"
+        layout="@layout/action_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgProductImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_medium"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mainToolbar" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtItemNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:text="@string/item_name"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_medium_x"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/edtItemName"
+        app:layout_constraintEnd_toStartOf="@id/edtItemName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/edtItemName" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/edtItemName"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:background="@drawable/bg_rounded_edit_text"
+        android:hint="@string/item_name"
+        android:inputType="text"
+        android:lines="1"
+        android:maxLines="1"
+        android:paddingHorizontal="26dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black_40_opacity"
+        android:textSize="@dimen/text_size_normal_xxxx"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/txtItemNameLabel"
+        app:layout_constraintTop_toBottomOf="@id/imgProductImage" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtItemAmountLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:text="@string/str_amount"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_medium_x"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/edtItemAmount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/edtItemAmount" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/edtItemAmount"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/bg_rounded_edit_text"
+        android:hint="@string/str_amount"
+        android:inputType="numberDecimal"
+        android:lines="1"
+        android:maxLines="1"
+        android:paddingHorizontal="26dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black_40_opacity"
+        android:textSize="@dimen/text_size_normal_xxxx"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/txtItemAmountLabel"
+        app:layout_constraintTop_toBottomOf="@id/imgProductImage" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtItemDiscountLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:text="@string/str_discount"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_medium_x"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/edtItemDiscount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/edtItemDiscount" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/edtItemDiscount"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/bg_rounded_edit_text"
+        android:hint="@string/str_discount"
+        android:inputType="numberDecimal"
+        android:lines="1"
+        android:maxLines="1"
+        android:paddingHorizontal="26dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black_40_opacity"
+        android:textSize="@dimen/text_size_normal_xxxx"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/txtItemDiscountLabel"
+        app:layout_constraintTop_toBottomOf="@id/edtItemAmount" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="@dimen/margin_large_xxxx"
+        android:layout_marginBottom="@dimen/margin_normal"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edtItemDiscount">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:background="@drawable/bg_btn_fill_rounded"
+            android:letterSpacing="0.3"
+            android:text="@string/str_back"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_normal_xx"
+            android:textStyle="bold"
+            app:backgroundTint="@color/color_fill_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAddToCart"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:background="@drawable/bg_btn_fill_rounded"
+            android:letterSpacing="0.3"
+            android:paddingHorizontal="@dimen/margin_normal"
+            android:text="@string/added_to_cart"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_normal_xx"
+            android:textStyle="bold"
+            app:backgroundTint="@color/color_fill_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.constraintlayout.widget.ConstraintLayout>

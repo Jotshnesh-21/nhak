@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:background="@color/color_fill_button">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgBackButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_arrow_back"
+        app:srcCompat="@drawable/ic_arrow_back"
+        android:layout_marginStart="@dimen/margin_normal_xxxx"
+        android:paddingHorizontal="@dimen/margin_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/margin_small_x"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imgCart" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgCart"
+        android:layout_width="35dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_cart"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_cart"
+        android:padding="@dimen/margin_small_xx"
+        android:layout_marginStart="@dimen/margin_small_x"
+        android:paddingHorizontal="@dimen/margin_small"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imgBackButton" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLogout"
+        android:layout_width="35dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_logout"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_logout"
+        android:tint="@color/white"
+        android:padding="@dimen/margin_small_xx"
+        android:layout_marginEnd="@dimen/margin_normal_xxxx"
+        android:paddingHorizontal="@dimen/margin_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

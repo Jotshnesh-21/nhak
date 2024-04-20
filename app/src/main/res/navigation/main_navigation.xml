@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/activitySellInOutList">
+    <fragment
+        android:id="@+id/activitySellInOutList"
+        android:name="com.sellinout.ui.sellinout.ActivitySellInOutList"
+        android:label="ActivitySellInOutList"
+        tools:layout="@layout/stock_list_activity" />
+    <fragment
+        android:id="@+id/activityProductScan"
+        android:name="com.sellinout.ui.productscan.ActivityProductScan"
+        android:label="ActivityProductScan"
+        tools:layout="@layout/scan_product_activity" />
+    <fragment
+        android:id="@+id/cardSummaryActivity"
+        android:name="com.sellinout.ui.cartsummary.CardSummaryActivity"
+        android:label="CardSummaryActivity"
+        tools:layout="@layout/cart_summary_activity" />
+</navigation>
