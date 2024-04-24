@@ -1,6 +1,7 @@
 package com.sellinout.ui.sellinoutdetail.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.sellinout.data.model.response.SellInOutDetailModel
 import com.sellinout.databinding.AdapterCartSummaryItemLayoutBinding
 import com.sellinout.utils.Const
+import com.sellinout.utils.amountCalculation
+import com.sellinout.utils.gone
 import com.sellinout.utils.invisible
 import com.sellinout.utils.visible
 
@@ -50,10 +53,35 @@ class AdapterSelInOutDetailSummary(
             binding.txtStockColor.text = model.ItemColor
             binding.txtStockSize.text = model.ItemSize
             binding.txtStockQty.text = model.Quantity?.toInt().toString()
-            binding.txtStockQtyMrp.text = String.format("%.2f", model.Discount).toDouble().toString()
+//            binding.txtStockQtyMrp.text = String.format("%.2f", model.Discount).toDouble().toString()
 //            binding.txtStockPrice.text = (model.Unit ?: "${Const.CURRENCY_UNIT}").plus(" " + model.Price.toString())
-            binding.txtStockPrice.text =
-                "${Const.CURRENCY_UNIT} " + String.format("%.2f", model.Price).toDouble().toString()
+//            binding.txtStockPrice.text =
+//                "${Const.CURRENCY_UNIT} " + String.format("%.2f", model.Price).toDouble().toString()
+            val disAmount = amountCalculation(
+                model.Quantity!!,
+                model.Price!!.toDouble(),
+                model.discountPercent!!.toDouble()
+            )
+
+            binding.txtStockPrice.text = "${Const.CURRENCY_UNIT} " + String.format("%.2f", disAmount).toDouble().toString()
+            binding.txtStockQtyMrp.text = String.format("%.2f", disAmount).toDouble()
+                .toString() + "-" + model.discountPercent + "% off"
+
+            if ((list.size - 1) == position) {
+                binding.linHFooterTable.visible()
+                var totalQty = 0
+                list.forEach {
+                    totalQty = totalQty.plus(it.Quantity?.toInt()!!)
+                }
+                binding.txtTotalQtyValue.text = totalQty.toString()
+                Log.e("QTYYY","SIZE: ${list.size} POSI: ${position} VIEW")
+
+            }else{
+                binding.linHFooterTable.gone()
+                Log.e("QTYYY","SIZE: ${list.size} POSI: ${position} GONE")
+
+            }
+
             if (isPrintScreen == true) {
                 binding.txtDeleteButton.invisible()
                 binding.txtEditButton.invisible()

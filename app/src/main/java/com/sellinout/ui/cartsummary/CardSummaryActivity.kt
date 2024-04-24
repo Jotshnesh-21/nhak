@@ -316,12 +316,15 @@ class CardSummaryActivity : BaseFragment(R.layout.cart_summary_activity) {
         itemAmount = 0.0
         itemDiscount = 0.0
         itemTotalAmount = 0.0
+        var totalQty = 0
         arrayList.forEach {
             itemAmount = itemAmount?.plus((it.Price!! * it.Quantity!!))
             itemDiscount = itemDiscount?.plus(it.Discount!!)
+            totalQty = totalQty.plus(it.Quantity?.toInt()!!)
         }
         itemTotalAmount = itemAmount?.minus(itemDiscount!!)
 
+//        binding.txtTotalQtyValue.text = totalQty.toString()
         binding.txtItemAmountValue.text =
             "${Const.CURRENCY_UNIT} " + String.format("%.2f", itemAmount).toDouble().toString()
         binding.txtDiscountValue.text =

@@ -86,6 +86,7 @@ class ActivityAddItemCamera : BaseActivity(R.layout.activity_item_detail) {
                     Const.ITEM_SIZE,
                     "",//Const.UNIT,
                     1.0,//1.0,
+                    0.0,
                     binding.edtItemAmount.text.toString().toDouble(),
                     discount/*binding.edtItemDiscount.text.toString()
                         .toDouble()*/,//Previously: 0.0  // list[4].toDouble(), //DISCOUNT

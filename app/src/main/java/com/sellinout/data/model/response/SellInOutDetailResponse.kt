@@ -29,6 +29,8 @@ data class SellInOutDetailModel(
     val Price: Double? = null,
     @SerializedName("Discount")
     val Discount: Double? = null,
+    @SerializedName("DiscountPercent")
+    val discountPercent: Double? = 0.0,
     @SerializedName("Amount")
     val Amount: Double? = null,
     @SerializedName("VchType")

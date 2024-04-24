@@ -3,6 +3,7 @@ package com.sellinout.ui.cartsummary.adapter
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
@@ -14,6 +15,7 @@ import com.sellinout.utils.Const
 import com.sellinout.utils.amountCalculation
 import com.sellinout.utils.getFormattedDate
 import com.sellinout.utils.getSellInOutLabel
+import com.sellinout.utils.gone
 import com.sellinout.utils.invisible
 import com.sellinout.utils.visible
 
@@ -57,13 +59,7 @@ class AdapterCartSummary(
             binding.txtStockColor.text = model.ItemColor
             binding.txtStockSize.text = model.ItemSize
             binding.txtStockQty.text = model.Quantity?.toInt().toString()
-            if (isPrintScreen == true) {
-                binding.txtStockQtyMrp.text =
-                    String.format("%.2f", model.Discount).toDouble().toString()
-            } else {
-                binding.txtStockQtyMrp.text = String.format("%.2f", model.Price).toDouble()
-                    .toString() + "-" + model.discountPercent + "% off"
-            }
+
 //            binding.txtStockPrice.text = (model.Unit ?: "${Const.CURRENCY_UNIT}").plus(" " + model.Price.toString())
 
             val disAmount = amountCalculation(
@@ -75,11 +71,33 @@ class AdapterCartSummary(
             binding.txtStockPrice.text = if (isPrintScreen == false) {
                 "${Const.CURRENCY_UNIT} " + String.format("%.2f", disAmount).toDouble().toString()
             } else {
-                "${Const.CURRENCY_UNIT} " + String.format("%.2f", model.Price).toDouble().toString()
+//                "${Const.CURRENCY_UNIT} " + String.format("%.2f", model.Price).toDouble().toString()
+                "${Const.CURRENCY_UNIT} " + String.format("%.2f", disAmount).toDouble().toString()
+            }
+
+//            if (isPrintScreen == true) {
+//                binding.txtStockQtyMrp.text =
+//                    String.format("%.2f", model.Discount).toDouble().toString()
+//            } else {
+//                binding.txtStockQtyMrp.text = String.format("%.2f", model.Price).toDouble()
+            binding.txtStockQtyMrp.text = String.format("%.2f", disAmount).toDouble()
+                .toString() + "-" + model.discountPercent + "% off"
+//            }
+
+            if ((list.size - 1) == position) {
+                binding.linHFooterTable.visible()
+                var totalQty = 0
+                list.forEach {
+                    totalQty = totalQty.plus(it.Quantity?.toInt()!!)
+                }
+                binding.txtTotalQtyValue.text = totalQty.toString()
+            }else{
+                binding.linHFooterTable.gone()
             }
             if (isPrintScreen == true) {
                 binding.txtDeleteButton.invisible()
                 binding.txtEditButton.invisible()
+//                binding.linHFooterTable.gone()
             } else {
                 binding.txtEditButton.visible()
                 binding.txtDeleteButton.visible()
@@ -89,6 +107,7 @@ class AdapterCartSummary(
                 binding.txtEditButton.setOnClickListener {
                     itemEdit.invoke(list[position], position)
                 }
+
             }
         }
     }

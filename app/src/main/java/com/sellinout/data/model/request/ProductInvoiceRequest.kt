@@ -19,6 +19,8 @@ data class ProductInvoiceRequest(
     val Unit: String? = null,
     @SerializedName("Quantity")
     var Quantity: Double? = null,
+    @SerializedName("DiscountPercent")
+    var DiscountPercent: Double = 0.0,
     @SerializedName("Price")
     var Price: Double? = null,
     @SerializedName("Discount")

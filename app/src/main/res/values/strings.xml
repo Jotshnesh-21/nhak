@@ -71,4 +71,5 @@
     <string name="str_summary_report">Total Stock Summary: </string>
     <string name="str_date_summary_report">Choose Date for the Summary:</string>
     <string name="str_select_date">Choose Date</string>
+    <string name="str_total_qty">Total Quantity: </string>
 </resources>

@@ -317,6 +317,7 @@ class ActivityProductScan : BaseFragment(R.layout.scan_product_activity) {
                                 list[2],
                                 "",//Const.UNIT,
                                 1.0,//1.0,
+                                list[4].toDouble(),
                                 list[3].toDouble(),
                                 discount,// list[4].toDouble(), //DISCOUNT
                                 amnt,
