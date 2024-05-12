@@ -81,7 +81,7 @@ class AdapterCartSummary(
 //            } else {
 //                binding.txtStockQtyMrp.text = String.format("%.2f", model.Price).toDouble()
             binding.txtStockQtyMrp.text = String.format("%.2f", disAmount).toDouble()
-                .toString() + "-" + model.discountPercent + "% off"
+                .toString()+"\n"+model.Price.toString() + "-" + model.discountPercent + "% off"
 //            }
 
             if ((list.size - 1) == position) {

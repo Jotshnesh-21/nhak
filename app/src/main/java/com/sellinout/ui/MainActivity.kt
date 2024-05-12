@@ -34,6 +34,9 @@ import com.sellinout.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import java.util.concurrent.Executors
 
 
@@ -71,8 +74,9 @@ class MainActivity : BaseActivity(R.layout.main_activity) {
             this.showToast("Coming Soon")
         }
         binding.txtSellOutHistory.setOnClickListener {
-            toggleDrawer()
-            this.showToast("Coming Soon")
+            toggleDrawer() //DAILY SUMMARY
+//            this.showToast("Coming Soon")
+            dailySummary()
         }
         binding.txtSellInHistory.setOnClickListener {
             toggleDrawer()
@@ -146,5 +150,110 @@ class MainActivity : BaseActivity(R.layout.main_activity) {
             }
         }
     }
+
+
+    private fun dailySummary(){
+        if (isPermissionGranted()) {
+            requestDidStart()
+            val selectedDate = Calendar.getInstance()
+            val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+            val dateFormatFileName = SimpleDateFormat("dd_MM_yyyy", Locale.getDefault())
+
+            val formattedDate = dateFormat.format(selectedDate.time)
+            val formattedDateFileName = dateFormatFileName.format(selectedDate.time)
+
+            Log.e("FORMATTEDDATE",">>${formattedDate}")
+            doMyTask(
+                "https://nhak.logicfirst.in/Item/StockSummary/${
+                    Prefs.getInt(
+                        SharePrefsKey.ACCOUNT_CODE, 0
+                    )
+                }/$formattedDate", "${
+                    Prefs.getInt(
+                        SharePrefsKey.ACCOUNT_CODE, 0
+                    )
+                }_${formattedDateFileName}.pdf"
+            )
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                200
+            )
+        }
+    }
+
+
+    private val myExecutor = Executors.newSingleThreadExecutor()
+    private val myHandler = Handler(Looper.getMainLooper())
+    private fun doMyTask(paramsUrl: String, paramName: String) {
+        Log.e("PARAMURI", ">> ${paramsUrl}")
+        myExecutor.execute {
+            try {
+                val extStorageDirectory = Environment.getExternalStorageDirectory().toString()
+                val folder = File(extStorageDirectory, getString(R.string.app_name))
+                folder.mkdir()
+                val pdfFile = File(folder, paramName)
+
+                pdfFile.createNewFile()
+                val strMessage = FileDownloader().downloadFile(paramsUrl, pdfFile)
+                myHandler.post {
+                    requestDidFinish()
+                    if (strMessage == "") {
+                        Toast.makeText(
+                            this,
+                            "File Downloaded Path: ${pdfFile.absolutePath}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        if (pdfFile.exists()) this.openPdfUsingIntent(pdfFile)
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Err: ${strMessage}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                requestDidFinish()
+            }
+
+        }
+    }
+
+    private fun isPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 200) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                requestDidStart()
+                doMyTask(
+                    "https://nhak.logicfirst.in/Item/StockSummary/${
+                        Prefs.getInt(
+                            SharePrefsKey.ACCOUNT_CODE, 0
+                        )
+                    }", "maven.pdf"
+                )
+            } else {
+                Toast.makeText(
+                    this,
+                    "Permission denied! Please grant storage permission to download the file.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
 
 }

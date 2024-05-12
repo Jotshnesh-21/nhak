@@ -64,8 +64,10 @@ class AdapterSelInOutDetailSummary(
             )
 
             binding.txtStockPrice.text = "${Const.CURRENCY_UNIT} " + String.format("%.2f", disAmount).toDouble().toString()
+    /*        binding.txtStockQtyMrp.text = String.format("%.2f", disAmount).toDouble()
+                .toString() + "-" + model.discountPercent + "% off"*/
             binding.txtStockQtyMrp.text = String.format("%.2f", disAmount).toDouble()
-                .toString() + "-" + model.discountPercent + "% off"
+                .toString()+"\n"+model.Price.toString() + "-" + model.discountPercent + "% off"
 
             if ((list.size - 1) == position) {
                 binding.linHFooterTable.visible()
