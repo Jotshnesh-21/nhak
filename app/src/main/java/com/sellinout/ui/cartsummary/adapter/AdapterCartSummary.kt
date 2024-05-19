@@ -75,12 +75,17 @@ class AdapterCartSummary(
                 "${Const.CURRENCY_UNIT} " + String.format("%.2f", disAmount).toDouble().toString()
             }
 
+            val disMainAmount = amountCalculation(
+                1.0,
+                model.Price!!.toDouble(),
+                model.discountPercent!!.toDouble()
+            )
 //            if (isPrintScreen == true) {
 //                binding.txtStockQtyMrp.text =
 //                    String.format("%.2f", model.Discount).toDouble().toString()
 //            } else {
 //                binding.txtStockQtyMrp.text = String.format("%.2f", model.Price).toDouble()
-            binding.txtStockQtyMrp.text = String.format("%.2f", disAmount).toDouble()
+            binding.txtStockQtyMrp.text = String.format("%.2f", disMainAmount).toDouble()
                 .toString()+"\n"+model.Price.toString() + "-" + model.discountPercent + "% off"
 //            }
 

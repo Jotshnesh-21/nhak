@@ -27,6 +27,7 @@ import com.sellinout.R
 import com.sellinout.base.BaseActivity
 import com.sellinout.databinding.ContainMainBinding
 import com.sellinout.databinding.MainActivityBinding
+import com.sellinout.ui.dailysummary.DailySummaryFragment
 import com.sellinout.ui.login.ActivityLogin
 import com.sellinout.ui.productscan.ActivityAddItemCamera
 import com.sellinout.ui.productscan.ActivityProductScan
@@ -87,12 +88,13 @@ class MainActivity : BaseActivity(R.layout.main_activity) {
         binding.txtSellOutHistory.setOnClickListener {
             toggleDrawer() //DAILY SUMMARY
 //            this.showToast("Coming Soon")
-            dailySummary()
+//            dailySummary()
+            openFragment(DailySummaryFragment().newInstance())
         }
         binding.txtSellInHistory.setOnClickListener {
             toggleDrawer()
             // STOCK SUMMARY
-            openFragment(StockSummaryFragment().newInstance())
+            openFragment(StockSummaryFragment().newInstance(false))
 
         }
         binding.txtAddressAndPrintName.setOnClickListener {

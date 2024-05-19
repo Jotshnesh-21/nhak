@@ -29,6 +29,8 @@ class ActivityAddItemCamera : BaseActivity(R.layout.activity_item_detail) {
         binding = ActivityItemDetailBinding.inflate(layoutInflater)
         bindingToolbar = binding.mainToolbar
         setContentView(binding.root)
+        binding.btnAddToCart.isEnabled =true
+        binding.btnAddToCart.isClickable =true
         setOnClickListener()
     }
 
@@ -62,6 +64,8 @@ class ActivityAddItemCamera : BaseActivity(R.layout.activity_item_detail) {
             } else if (binding.edtItemDiscount.text.toString() == "") {
                 this.showToast("Please enter discount")
             } else {
+                binding.btnAddToCart.isEnabled =false
+                binding.btnAddToCart.isClickable =false
                 val currentDate = getCurrentDate("dd-MM-yyyy")
 
                 /* if (Const.voucherNumber == null && Const.voucherNumber == "") {

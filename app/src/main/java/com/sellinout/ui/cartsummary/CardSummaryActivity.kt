@@ -129,7 +129,13 @@ class CardSummaryActivity : BaseFragment(R.layout.cart_summary_activity) {
         }
     }
 
+
+private fun checkoutButtonEnableDisable(isEnable : Boolean=true){
+    binding.btnCheckout.isEnabled =isEnable
+    binding.btnCheckout.isClickable =isEnable
+}
     private fun addToCartAPICall() {
+        checkoutButtonEnableDisable(false)
         (requireActivity() as BaseActivity).requestDidStart()
         val apiService = RetrofitClient.getClient(
             Prefs.getString(
@@ -142,6 +148,7 @@ class CardSummaryActivity : BaseFragment(R.layout.cart_summary_activity) {
         call.enqueue(object : Callback<BaseResponse> {
             override fun onResponse(call: Call<BaseResponse>, response: Response<BaseResponse>) {
                 (requireActivity() as BaseActivity).requestDidFinish()
+                checkoutButtonEnableDisable(true)
                 if (response.isSuccessful) {
                     val it = response.body()
                     if (it?.Ststus == 1) {
@@ -174,6 +181,7 @@ class CardSummaryActivity : BaseFragment(R.layout.cart_summary_activity) {
             }
 
             override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
+                checkoutButtonEnableDisable(true)
                 (requireActivity() as BaseActivity).requestDidFinish()
                 requireActivity().showToast("Something went wrong, Please try again after sometime")
             }

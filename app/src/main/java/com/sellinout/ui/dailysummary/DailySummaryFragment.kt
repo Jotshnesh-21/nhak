@@ -1,4 +1,4 @@
-package com.sellinout.ui.stocksummary
+package com.sellinout.ui.dailysummary
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -22,24 +22,17 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import com.pixplicity.easyprefs.library.Prefs
-import com.sellinout.BuildConfig
 import com.sellinout.R
 import com.sellinout.base.BaseActivity
 import com.sellinout.base.BaseFragment
 import com.sellinout.databinding.FragmentStockSummaryBinding
-import com.sellinout.network.ApiService
-import com.sellinout.network.RetrofitClient
 import com.sellinout.ui.MainActivity
-import com.sellinout.utils.Const
 import com.sellinout.utils.FileDownloader
 import com.sellinout.utils.SharePrefsKey
 import com.sellinout.utils.openPdfUsingIntent
 import com.sellinout.utils.showToast
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.File
 import java.io.IOException
 import java.net.URLConnection
@@ -48,7 +41,7 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.Executors
 
-class StockSummaryFragment : BaseFragment(R.layout.fragment_stock_summary) {
+class DailySummaryFragment : BaseFragment(R.layout.fragment_stock_summary) {
     private val calendar = Calendar.getInstance()
     private lateinit var binding: FragmentStockSummaryBinding
 
@@ -58,6 +51,8 @@ class StockSummaryFragment : BaseFragment(R.layout.fragment_stock_summary) {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentStockSummaryBinding.inflate(inflater, container, false)
+        binding.txtDirectPdfDownload.isVisible = false
+        binding.btnDownload.isVisible = false
         setOnClickListener()
         return binding.root
     }
@@ -66,60 +61,11 @@ class StockSummaryFragment : BaseFragment(R.layout.fragment_stock_summary) {
         binding.btnDateDownload.setOnClickListener {
             showDatePicker()
         }
-        binding.btnDownload.setOnClickListener {
-            downloadFile(
-                "https://nhak.logicfirst.in/Item/StockSummary/${
-                    Prefs.getInt(
-                        SharePrefsKey.ACCOUNT_CODE, 0
-                    )
-                }", "${
-                    Prefs.getInt(
-                        SharePrefsKey.ACCOUNT_CODE, 0
-                    )
-                }.pdf"
-            )
-            /*if (isPermissionGranted()) {
-                (requireActivity() as BaseActivity).requestDidStart()
-                doMyTask(
-                    "https://nhak.logicfirst.in/Item/StockSummary/${
-                        Prefs.getInt(
-                            SharePrefsKey.ACCOUNT_CODE, 0
-                        )
-                    }", "${
-                        Prefs.getInt(
-                            SharePrefsKey.ACCOUNT_CODE, 0
-                        )
-                    }.pdf"
-                )
-            } else {
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    ActivityCompat.requestPermissions(
-                        requireActivity(),
-                        arrayOf(
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.MANAGE_EXTERNAL_STORAGE
-                        ),
-                        200
-                    )
-                }else{
-                    ActivityCompat.requestPermissions(
-                        requireActivity(),
-                        arrayOf(
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        ),
-                        200
-                    )
-                }
-            }
-*/
-        }
     }
 
-    fun newInstance(isDaily:Boolean=false): StockSummaryFragment {
+    fun newInstance(): DailySummaryFragment {
         val args = Bundle()
-        args.putBoolean("IsDaily",isDaily)
-        val fragment = StockSummaryFragment()
+        val fragment = DailySummaryFragment()
         fragment.arguments = args
         return fragment
     }
@@ -138,7 +84,7 @@ class StockSummaryFragment : BaseFragment(R.layout.fragment_stock_summary) {
 
 //                "Selected Date: $formattedDate"
 
-                downloadFile("https://nhak.logicfirst.in/Item/StockSummary/${
+                downloadFile("https://nhak.logicfirst.in/Invoice/DownloadDailySummary/${
                     Prefs.getInt(
                         SharePrefsKey.ACCOUNT_CODE, 0
                     )
@@ -274,6 +220,7 @@ class StockSummaryFragment : BaseFragment(R.layout.fragment_stock_summary) {
         val formattedDate = dateFormat.format(selectedDate.time)
         val formattedDateFileName = dateFormatFileName.format(selectedDate.time)
 
+        Log.e("paramsUrl", ">>${paramsUrl}")
         Log.e("FORMATTEDDATE", ">>${formattedDate}")
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S) {
             if (ActivityCompat.checkSelfPermission(
@@ -374,16 +321,17 @@ class StockSummaryFragment : BaseFragment(R.layout.fragment_stock_summary) {
                     requireActivity().applicationContext.packageName + ".provider",
                     result
                 )
-           /*     val intentShareFile = Intent(Intent.ACTION_SEND)
-                intentShareFile.type = URLConnection.guessContentTypeFromName(result.name)
-                intentShareFile.putExtra(
-                    Intent.EXTRA_STREAM,
-                    photoURI
-                )
-                intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                startActivity(Intent.createChooser(intentShareFile, ""))*/
+//                val intentShareFile = Intent(Intent.ACTION_SEND)
+//                intentShareFile.type = URLConnection.guessContentTypeFromName(result.name)
+//                intentShareFile.putExtra(
+//                    Intent.EXTRA_STREAM,
+//                    photoURI
+//                )
+//                intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//                startActivity(Intent.createChooser(intentShareFile, ""))
                 if (result.exists()) requireActivity().openPdfUsingIntent(result)
             } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

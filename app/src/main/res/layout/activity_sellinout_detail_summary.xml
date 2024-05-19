@@ -277,7 +277,6 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/txtTotalAmountLabel"
                 app:layout_constraintEnd_toEndOf="parent"
-
                 app:layout_constraintTop_toTopOf="@id/txtTotalAmountLabel"
                 tools:text="Rs. 123" />
 

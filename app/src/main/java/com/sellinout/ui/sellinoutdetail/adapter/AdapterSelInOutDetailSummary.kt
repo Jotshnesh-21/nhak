@@ -66,7 +66,12 @@ class AdapterSelInOutDetailSummary(
             binding.txtStockPrice.text = "${Const.CURRENCY_UNIT} " + String.format("%.2f", disAmount).toDouble().toString()
     /*        binding.txtStockQtyMrp.text = String.format("%.2f", disAmount).toDouble()
                 .toString() + "-" + model.discountPercent + "% off"*/
-            binding.txtStockQtyMrp.text = String.format("%.2f", disAmount).toDouble()
+            val disWithoutAmount = amountCalculation(
+                1.0,
+                model.Price!!.toDouble(),
+                model.discountPercent!!.toDouble()
+            )
+            binding.txtStockQtyMrp.text = String.format("%.2f", disWithoutAmount).toDouble()
                 .toString()+"\n"+model.Price.toString() + "-" + model.discountPercent + "% off"
 
             if ((list.size - 1) == position) {

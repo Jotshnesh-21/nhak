@@ -86,6 +86,7 @@ class ActivityProductScan : BaseFragment(R.layout.scan_product_activity) {
                 ), object : TypeToken<ArrayList<ProductInvoiceRequest>>() {}.type
             )
             Log.e("RESUME", ">>>> ${listOfProduct.size}")
+            quantityCount()
         }
         initialiseDetectorsAndSources()
     }
@@ -371,8 +372,7 @@ class ActivityProductScan : BaseFragment(R.layout.scan_product_activity) {
         }
         (requireActivity() as MainActivity).bindingContainMain.txtItemCount.visible()
         (requireActivity() as MainActivity).bindingContainMain.txtItemCount.text =
-            "Count: $quantity"
-//        "Count: ${listOfProduct.size}"
+            "Count: ".plus(quantity)
     }
 
 /*
