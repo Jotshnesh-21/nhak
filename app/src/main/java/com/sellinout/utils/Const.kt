@@ -24,4 +24,7 @@ object Const {
     //ADD PRODUCT TYPE FOR QR CODE = 1 and Image = 2
     const val ITEM_TYPE_QR_CODE = 1
     const val ITEM_TYPE_IMAGE = 2
+
+    const val PERMISSION_REQUEST_CODE = 4000
+
 }

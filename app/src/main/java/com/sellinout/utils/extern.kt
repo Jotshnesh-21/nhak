@@ -393,3 +393,16 @@ fun discountAmountCalculation(qty: Double, price: Double, discountPer: Double): 
     val amountBeforeDisc = qty * price
     return amountBeforeDisc * discountPer / 100
 }
+
+fun Context.isPermissionsAllowedREADStorage(): Boolean {
+    val Permission_2 =
+        ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+    return Permission_2 == PackageManager.PERMISSION_GRANTED
+}
+fun Activity.requestPermissionREADStorage() {
+    ActivityCompat.requestPermissions(
+        this, arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ), Const.PERMISSION_REQUEST_CODE
+    )
+}

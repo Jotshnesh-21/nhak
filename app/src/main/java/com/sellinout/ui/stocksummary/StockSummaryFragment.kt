@@ -1,8 +1,15 @@
 package com.sellinout.ui.stocksummary
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.app.DownloadManager
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -14,6 +21,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.pixplicity.easyprefs.library.Prefs
 import com.sellinout.BuildConfig
 import com.sellinout.R
@@ -22,6 +30,7 @@ import com.sellinout.base.BaseFragment
 import com.sellinout.databinding.FragmentStockSummaryBinding
 import com.sellinout.network.ApiService
 import com.sellinout.network.RetrofitClient
+import com.sellinout.ui.MainActivity
 import com.sellinout.utils.Const
 import com.sellinout.utils.FileDownloader
 import com.sellinout.utils.SharePrefsKey
@@ -33,6 +42,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import java.net.URLConnection
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -57,8 +67,18 @@ class StockSummaryFragment : BaseFragment(R.layout.fragment_stock_summary) {
             showDatePicker()
         }
         binding.btnDownload.setOnClickListener {
-
-            if (isPermissionGranted()) {
+            downloadFile(
+                "https://nhak.logicfirst.in/Item/StockSummary/${
+                    Prefs.getInt(
+                        SharePrefsKey.ACCOUNT_CODE, 0
+                    )
+                }", "${
+                    Prefs.getInt(
+                        SharePrefsKey.ACCOUNT_CODE, 0
+                    )
+                }.pdf"
+            )
+            /*if (isPermissionGranted()) {
                 (requireActivity() as BaseActivity).requestDidStart()
                 doMyTask(
                     "https://nhak.logicfirst.in/Item/StockSummary/${
@@ -72,13 +92,27 @@ class StockSummaryFragment : BaseFragment(R.layout.fragment_stock_summary) {
                     }.pdf"
                 )
             } else {
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    200
-                )
-            }
 
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    ActivityCompat.requestPermissions(
+                        requireActivity(),
+                        arrayOf(
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                        ),
+                        200
+                    )
+                }else{
+                    ActivityCompat.requestPermissions(
+                        requireActivity(),
+                        arrayOf(
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ),
+                        200
+                    )
+                }
+            }
+*/
         }
     }
 
@@ -103,7 +137,16 @@ class StockSummaryFragment : BaseFragment(R.layout.fragment_stock_summary) {
 
 //                "Selected Date: $formattedDate"
 
-                if (isPermissionGranted()) {
+                downloadFile("https://nhak.logicfirst.in/Item/StockSummary/${
+                    Prefs.getInt(
+                        SharePrefsKey.ACCOUNT_CODE, 0
+                    )
+                }/$formattedDate", "${
+                    Prefs.getInt(
+                        SharePrefsKey.ACCOUNT_CODE, 0
+                    )
+                }_${formattedDateFileName}.pdf")
+               /* if (isPermissionGranted()) {
                     (requireActivity() as BaseActivity).requestDidStart()
                     doMyTask(
                         "https://nhak.logicfirst.in/Item/StockSummary/${
@@ -123,13 +166,13 @@ class StockSummaryFragment : BaseFragment(R.layout.fragment_stock_summary) {
                         200
                     )
                 }
-
+*/
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         )
-        datePickerDialog.datePicker.maxDate = calendar.getTimeInMillis()
+        datePickerDialog.datePicker.maxDate = calendar.timeInMillis
         datePickerDialog.show()
     }
 
@@ -173,20 +216,37 @@ class StockSummaryFragment : BaseFragment(R.layout.fragment_stock_summary) {
     }
 
     private fun isPermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireActivity(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        }
     }
 
-    override fun onRequestPermissionsResult(
+    /*override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 200) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            val isGranted =  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED
+            }else{
+                grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+            }
+
+            if (isGranted) {
                 (requireActivity() as BaseActivity).requestDidStart()
                 doMyTask(
                     "https://nhak.logicfirst.in/Item/StockSummary/${
@@ -203,6 +263,142 @@ class StockSummaryFragment : BaseFragment(R.layout.fragment_stock_summary) {
                 ).show()
             }
         }
+    }*/
+
+    private fun downloadFile(paramsUrl: String, paramName: String) {
+        val selectedDate = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val dateFormatFileName = SimpleDateFormat("dd_MM_yyyy", Locale.getDefault())
+
+        val formattedDate = dateFormat.format(selectedDate.time)
+        val formattedDateFileName = dateFormatFileName.format(selectedDate.time)
+
+        Log.e("FORMATTEDDATE", ">>${formattedDate}")
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S) {
+            if (ActivityCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf<String>(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ),
+                    56444
+                )
+            }else{
+                DownloadFile(
+                    paramsUrl,paramName
+                ).execute()
+            }
+        } else {
+            if (!checkStorageCameraPermission13()) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf<String>(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_MEDIA_IMAGES
+                    ),
+                    56444
+                )
+            }else{
+                DownloadFile(
+                    paramsUrl,paramName
+                ).execute()
+            }
+        }
     }
+    private fun checkStorageCameraPermission13(): Boolean {
+        val permissionCamera = ContextCompat.checkSelfPermission(
+            requireActivity(),
+            Manifest.permission.CAMERA
+        )
+        val permissionStorage = ContextCompat.checkSelfPermission(
+            requireActivity(),
+            Manifest.permission.READ_MEDIA_IMAGES
+        )
+        return (permissionCamera == PackageManager.PERMISSION_GRANTED && permissionStorage == PackageManager.PERMISSION_GRANTED)
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private inner class DownloadFile(private var url: String, private var strFileName: String) :
+        AsyncTask<Void, Void, File>() {
+
+        override fun onPreExecute() {
+            requireActivity().runOnUiThread {
+                requireActivity().showToast(getString(R.string.downloading))
+                (requireActivity() as MainActivity).requestDidStart()
+            }
+        }
+
+        override fun doInBackground(vararg params: Void?): File? {
+            if (!url.startsWith("http")) {
+                (requireActivity() as MainActivity).requestDidFinish()
+                return null
+            }
+            try {
+                val file = File(Environment.getExternalStorageDirectory(), "Download")
+                if (!file.exists()) {
+                    file.mkdirs()
+                }
+                val result = commonDocumentDirPath(strFileName)
+                sharedFilePath = result
+                val downloadManager =
+                    requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager?
+                val request = DownloadManager.Request(Uri.parse(url))
+                request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)
+                request.setDestinationUri(Uri.fromFile(result))
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                downloadManager?.enqueue(request)
+            } catch (e: Exception) {
+                Log.e(">>>>>", e.toString())
+            }
+            return sharedFilePath
+        }
+
+        override fun onPostExecute(result: File) {
+            (requireActivity() as MainActivity).requestDidFinish()
+            try {
+                val photoURI = FileProvider.getUriForFile(
+                    requireActivity(),
+                    requireActivity().applicationContext.packageName + ".provider",
+                    result
+                )
+                val intentShareFile = Intent(Intent.ACTION_SEND)
+                intentShareFile.type = URLConnection.guessContentTypeFromName(result.name)
+                intentShareFile.putExtra(
+                    Intent.EXTRA_STREAM,
+                    photoURI
+                )
+                intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                startActivity(Intent.createChooser(intentShareFile, ""))
+            } catch (e: Exception) {
+            }
+        }
+    }
+
+    fun commonDocumentDirPath(folderName: String): File {
+        var dir: File? = null
+        dir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                    .toString() + "/" + folderName
+            )
+        } else {
+            File(Environment.getExternalStorageDirectory().toString() + "/" + folderName)
+        }
+        return dir
+    }
+
+    var sharedFilePath: File? = null
 
 }
